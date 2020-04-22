@@ -14,12 +14,12 @@ class CreateTasksTable extends Migration
     public function up()
     {
         Schema::create('tasks', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('name');
+            $table->bigIncrements('id');
+            $table->string('name', 255);
             $table->tinyInteger('status');
-            $table->string('description');
-            $table->integer('member_id')->unsigned();
-            $table->integer('project_id')->unsigned();
+            $table->string('description', 255);
+            $table->bigInteger('member_id')->unsigned();
+            $table->bigInteger('project_id')->unsigned();
             $table->timestamps();
         });
     }

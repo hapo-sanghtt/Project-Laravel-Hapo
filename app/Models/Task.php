@@ -4,12 +4,10 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Tasks extends Model
+class Task extends Model
 {
-    protected $table = "tasks";
-
     public function members()
     {
-        return $this->belongsto('App/Members');
+        return $this->belongsto('App/Member');
     }
 }
