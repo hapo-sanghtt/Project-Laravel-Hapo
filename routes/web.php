@@ -20,3 +20,7 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+Route::resource('members', 'MemberController');
+Route::get('/members/{id}/edit', 'MemberController@edit');
+Route::patch('/members/{id}', 'MemberController@update');

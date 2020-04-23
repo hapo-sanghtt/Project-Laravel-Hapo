@@ -2,7 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\SaveMember;
 use Illuminate\Http\Request;
+use App\Models\Member;
+use App\Models\Project;
+use App\Models\Customer;
+use App\Models\Task;
+use Redirect, Response;
 
 class MemberController extends Controller
 {
@@ -13,7 +19,8 @@ class MemberController extends Controller
      */
     public function index()
     {
-        //
+        $members = Member::paginate(10);
+        return view('members.index', compact('members'));
     }
 
     /**
@@ -23,7 +30,8 @@ class MemberController extends Controller
      */
     public function create()
     {
-        //
+        $project = Project::all();
+        return view('members.create', ['project' => $project]);
     }
 
     /**
@@ -34,7 +42,8 @@ class MemberController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        Member::create($request->only(['image', 'full_name', 'password', 'gender', 'email', 'phone', 'address', 'role', 'project_id']));
+        return redirect()->route('members.index')->with('success', 'Member save!');
     }
 
     /**
@@ -45,7 +54,8 @@ class MemberController extends Controller
      */
     public function show($id)
     {
-        //
+        $member = Member::findOrFail($id);
+        return view('members.show', compact('member'));
     }
 
     /**
@@ -56,7 +66,9 @@ class MemberController extends Controller
      */
     public function edit($id)
     {
-        //
+        $member = Member::findOrFail($id);
+        $project = Project::all();
+        return view('members.edit', compact('member'), ['project'=>$project]);
     }
 
     /**
@@ -68,7 +80,9 @@ class MemberController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $member = Member::findOrFail($id);
+        $member->update($request->only(['image', 'full_name', 'password', 'gender', 'email', 'phone', 'address', 'role', 'project_id']));
+        return redirect()->route('members.index')->with('success', 'Member update!');
     }
 
     /**
@@ -79,6 +93,8 @@ class MemberController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $member = Member::findOrFail($id);
+        $member->delete();
+        return redirect()->route('members.index')->with('success', 'Member delete!');
     }
 }
