@@ -38,13 +38,17 @@ return [
     'guards' => [
         'web' => [
             'driver' => 'session',
-            'provider' => 'users',
+            'provider' => 'members',
         ],
 
         'api' => [
             'driver' => 'token',
             'provider' => 'users',
             'hash' => false,
+        ],
+        'member' => [
+            'driver' => 'session',
+            'provider' => 'members',
         ],
     ],
 
@@ -69,6 +73,10 @@ return [
         'users' => [
             'driver' => 'eloquent',
             'model' => App\User::class,
+        ],
+        'members' => [
+            'driver' => 'eloquent',
+            'model' => App\Member::class,
         ],
 
         // 'users' => [
