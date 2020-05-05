@@ -1,10 +1,10 @@
-@extends('members.base')
+@extends('layouts.adminlte')
 
-@section('action-content')
+@section('contents')
 
     <div class="row">
         <div class="col-sm-8 offset-sm-2">
-            <h4 class="display-3">Add a member</h4>
+            <h4 class="d-flex text-center" >Add a member</h4>
         </div>
         @if ($errors->any())
             <div class="alert alert-danger">
@@ -18,23 +18,17 @@
             </div>
             </br>
         @endif
-        <div class="col-xs-6 col-sm-6 col-md-6 text-center">
+        <div class="col-xs-6 col-sm-6 col-md-6">
             <form method="post" action="{{ route('members.store') }}">
                 @csrf
-                <div class="input-group">
-                    <strong>Image</strong>
-                    <div class="custom-file">
-                        <input type="file" class="custom-file-input">
-                        <label class="custom-file-label">Choose file</label>
-                    </div>
-                </div>
                 <div class="form-group">
-                    <strong>Full name:</strong>
-                    <input type="text" name="full_name" id="full_name" class="form-control" placeholder="Full_name" onchange="validate()">
-                </div>
-                <div class="form-group">
-                    <strong>Password:</strong>
-                    <input type="text" name="password" id="password" class="form-control" placeholder="Password" onchange="validate()">
+                    <strong>Name:</strong>
+                    <input type="text" name="name" id="name" class="form-control" @error('name') is-invalid @enderror placeholder="Name" onchange="validate()">
+                    @error('name')
+                    <span class="invalid-feedback" role="alert">
+                        <strong>{{ $message }}</strong>
+                    </span>
+                    @enderror
                 </div>
                 <div class="form-group">
                     <strong>Gender:</strong>
@@ -45,30 +39,65 @@
                 </div>
                 <div class="form-group">
                     <strong>Email:</strong>
-                    <input type="text" name="email" id="email" class="form-control" placeholder="Email" onchange="validate()">
+                    <input type="text" name="email" id="email" class="form-control" @error('email') is-invalid @enderror value="{{ old('email') }}" placeholder="Email" onchange="validate()">
+                    @error('email')
+                    <span class="invalid-feedback" role="alert">
+                        <strong>{{ $message }}</strong>
+                    </span>
+                    @enderror
                 </div>
                 <div class="form-group">
                     <strong>Phone number:</strong>
-                    <input type="text" name="phone" id="phone" class="form-control" placeholder="Phone number" onchange="validate()">
+                    <input type="text" name="phone" id="phone" class="form-control" @error('phone') is-invalid @enderror value="{{ old('phone') }}" placeholder="Phone number" onchange="validate()">
+                    @error('phone')
+                    <span class="invalid-feedback" role="alert">
+                        <strong>{{ $message }}</strong>
+                    </span>
+                    @enderror
                 </div>
                 <div class="form-group">
                     <strong>Address:</strong>
-                    <input type="text" name="address" id="address" class="form-control" placeholder="Address" onchange="validate()" onkeypress="validate()">
+                    <input type="text" name="address" id="address" class="form-control" @error('address') is-invalid @enderror value="{{ old('address') }}" placeholder="Address" onchange="validate()" onkeypress="validate()">
+                    @error('address')
+                    <span class="invalid-feedback" role="alert">
+                        <strong>{{ $message }}</strong>
+                    </span>
+                    @enderror
+                </div>
+                <div class="form-group">
+                    <strong for="password">Password:</strong>
+                    <input id="password" type="text" name="password" class="form-control @error('password') is-invalid @enderror" placeholder="Password" required autocomplete="new-password">
+
+                    @error('password')
+                    <span class="invalid-feedback" role="alert">
+                        <strong>{{ $message }}</strong>
+                    </span>
+                    @enderror
+                </div>
+                <div class="form-group">
+                    <strong for="password-confirm">{{ __('Confirm Password') }}</strong>
+                    <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required autocomplete="new-password">
                 </div>
                 <div class="form-group">
                     <strong>Role:</strong>
                     <select class="role" name="role">
-                        <option>Admin</option>
-                        <option>No</option>
+                        <option value="1">Admin</option>
+                        <option value="0">No</option>
                     </select>
                 </div>
                 <div class="form-group">
-                    <label class="col-md-4 control-label">ID project</label>
-                    <div class="col-md-6">
-                        <input type="text" name="project_id" id="project_id" class="form-control" placeholder="ID project" onchange="validate()" onkeypress="validate()">
-                    </div>
+                    <strong>ID project:</strong>
+                    <select type="text" name="project_id" id="project_id" class="form-control" value="{{ old('project_id') }}" placeholder="ID project" onchange="validate()" onkeypress="validate()">
+                        <option value="1">Project 1</option>
+                        <option value="2">Project 2</option>
+                    @error('project_id')
+                    <span class="invalid-feedback" role="alert">
+                        <strong>{{ $message }}</strong>
+                    </span>
+                    @enderror
+                    </select>
                 </div>
-                <button type="submit" class="btn btn-primary-outline">Add member</button>
+                <button type="submit" class="btn btn-primary">Add member</button>
                 <a href="{{ route('members.index') }}" class="btn btn-danger">Cancel</a>
             </form>
         </div>

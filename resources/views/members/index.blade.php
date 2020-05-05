@@ -1,6 +1,6 @@
-@extends('members.base')
+@extends('layouts.adminlte')
 
-@section('action-content')
+@section('contents')
 
     <div class="'row">
         <div class="col-lg-12" style="text-align: center">
@@ -21,9 +21,7 @@
             <thead>
             <tr>
                 <td class="text-center"><strong>ID</strong></td>
-                <td class="text-center"><strong>Image</strong></td>
-                <td class="text-center"><strong>Full name</strong></td>
-                <td class="text-center"><strong>Password</strong></td>
+                <td class="text-center"><strong>Name</strong></td>
                 <td class="text-center"><strong>Gender</strong></td>
                 <td class="text-center"><strong>Email</strong></td>
                 <td class="text-center"><strong>Phone</strong></td>
@@ -34,18 +32,16 @@
             </tr>
             </thead>
             <tbody>
-            @foreach($students as $student)
+            @foreach($members as $member)
                 <tr>
-                    <td class="text-center">{{$student->id}}</td>
-                    <td class="text-center">{{$student->image}}</td>
-                    <td class="text-center">{{$student->full_name}}</td>
-                    <td class="text-center">{{$student->password}}</td>
-                    <td class="text-center">{{$student->gender}}</td>
-                    <td class="text-center">{{$student->email}}</td>
-                    <td class="text-center">{{$student->phone}}</td>
-                    <td class="text-center">{{$student->address}}</td>
-                    <td class="text-center">{{$student->Role}}</td>
-                    <td class="text-center">{{$student->project_id}}</td>
+                    <td class="text-center">{{$member->id}}</td>
+                    <td class="text-center">{{$member->name}}</td>
+                    <td class="text-center">{{$member->gender}}</td>
+                    <td class="text-center">{{$member->email}}</td>
+                    <td class="text-center">{{$member->phone}}</td>
+                    <td class="text-center">{{$member->address}}</td>
+                    <td class="text-center">{{$member->role}}</td>
+                    <td class="text-center">{{$member->project_id}}</td>
                     <td>
                         <a class="btn btn-info" href="{{route('members.show',$member->id)}}">Show</a>
                     </td>

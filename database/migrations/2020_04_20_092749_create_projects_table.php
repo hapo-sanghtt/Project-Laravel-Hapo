@@ -18,7 +18,7 @@ class CreateProjectsTable extends Migration
             $table->string('title', 255);
             $table->string('description', 255);
             $table->tinyInteger('status');
-            $table->date('time_estime');
+            $table->string('time_estime', 255);
             $table->date('start_date');
             $table->date('end_date');
             $table->bigInteger('member_id')->unsigned();

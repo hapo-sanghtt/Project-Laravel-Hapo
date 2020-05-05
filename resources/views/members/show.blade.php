@@ -1,51 +1,45 @@
-@extends('members.base')
+@extends('layouts.adminlte')
 
-@section('action-content')
+@section('contents')
 
-    <div class="card">
-        <div class="card-body">
-            <h2>Member</h2>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-8 offset-sm-2">
+            <h2 class="text-center">Member</h2>
             <div class="form-group">
-                <label for="id">ID:</label>
-                <p type="text" class="form-control">{{ $member->id}}</p>
+                <strong for="id">ID:</strong>
+                <p type="text" class="form-control">{{ $members->id}}</p>
             </div>
             <div class="form-group">
-                <label for="image">Image:</label>
-                <p type="text" class="form-control">{{ $member->image}}</p>
+                <strong for="name">Name:</strong>
+                <p type="text" class="form-control">{{ $members->name}}</p>
             </div>
             <div class="form-group">
-                <label for="full_name">Full name:</label>
-                <p type="text" class="form-control">{{ $member->full_name}}</p>
+                <strong for="gender">Gender:</strong>
+                <p type="text" class="form-control">{{ $members->gender}}</p>
             </div>
             <div class="form-group">
-                <label for="password">Password:</label>
-                <p type="text" class="form-control">{{ $member->password}}</p>
+                <strong for="email">Email:</strong>
+                <p type="text" class="form-control">{{ $members->email}}</p>
             </div>
             <div class="form-group">
-                <label for="gender">Gender:</label>
-                <p type="text" class="form-control">{{ $member->gender}}</p>
+                <strong for="phone">Phone:</strong>
+                <p type="text" class="form-control">{{ $members->phone}}</p>
             </div>
             <div class="form-group">
-                <label for="email">Email:</label>
-                <p type="text" class="form-control">{{ $student->email}}</p>
+                <strong for="address">Address:</strong>
+                <p type="text" class="form-control">{{ $members->address}}</b></p>
             </div>
             <div class="form-group">
-                <label for="phone">Phone:</label>
-                <p type="text" class="form-control">{{ $member->phone}}</p>
+                <strong for="role">Role:</strong>
+                <p type="text" class="form-control">{{ $members->role}}</p>
             </div>
             <div class="form-group">
-                <label for="address">Address:</label>
-                <p type="text" class="form-control">{{ $member->address}}</b></p>
-            </div>
-            <div class="form-group">
-                <label for="role">Role:</label>
-                <p type="text" class="form-control">{{ $member->role}}</p>
-            </div>
-            <div class="form-group">
-                <label for="project_id">ID project:</label>
-                <p type="text" class="form-control">{{ $member->project_id}}</p>
+                <strong for="project_id">ID project:</strong>
+                <p type="text" class="form-control">{{ $members->project_id}}</p>
             </div>
             <td colspan="2" style="text-align: right "><a href="{{ route('members.index') }}" class="btn btn-danger">OK</a>
+            </div>
         </div>
     </div>
 

@@ -1,8 +1,10 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Http\Requests\SaveCustomer;
+use App\Customer;
 use Illuminate\Http\Request;
+use Redirect, Response;
 
 class CustomerController extends Controller
 {
@@ -13,7 +15,8 @@ class CustomerController extends Controller
      */
     public function index()
     {
-        //
+        $customer = Customer::all();
+        return view('customers.index', ['customers'=>$customer]);
     }
 
     /**
@@ -23,7 +26,7 @@ class CustomerController extends Controller
      */
     public function create()
     {
-        //
+        return view('customers.create');
     }
 
     /**
@@ -34,7 +37,8 @@ class CustomerController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        Customer::create($request->only(['name', 'gender', 'email', 'phone', 'address', 'member_id', 'project_id']));
+        return redirect()->route('customers.index')->with('success', 'Customer save!');
     }
 
     /**
@@ -45,7 +49,8 @@ class CustomerController extends Controller
      */
     public function show($id)
     {
-        //
+        $customer = Customer::findOrFail($id);
+        return view('customers.show', ['customers'=> $customer]);
     }
 
     /**
@@ -56,7 +61,8 @@ class CustomerController extends Controller
      */
     public function edit($id)
     {
-        //
+        $customer = Customer::findOrFail($id);
+        return view('customers.edit',['customers'=>$customer]);
     }
 
     /**
@@ -68,7 +74,9 @@ class CustomerController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $customer = Customer::findOrFail($id);
+        $customer->update($request->only(['name', 'gender', 'email', 'phone', 'address', 'member_id', 'project_id']));
+        return redirect()->route('customers.index')->with('success', 'Customer update!');
     }
 
     /**
@@ -79,6 +87,8 @@ class CustomerController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $customer = Customer::findOrFail($id);
+        $customer->delete();
+        return redirect()->route('customers.index')->with('success', 'Customer delete!');
     }
 }
