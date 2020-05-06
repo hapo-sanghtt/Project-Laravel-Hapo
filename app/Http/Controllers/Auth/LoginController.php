@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Auth;
+
 use Auth;
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
@@ -51,8 +52,11 @@ class LoginController extends Controller
             'password' => 'required|min:6'
         ]);
 
-        if (Auth::guard()->attempt(['email' => $request->email, 'password' => $request->password], $request->get('remember'))) {
-
+        if (Auth::guard()
+            ->attempt([
+                'email' => $request->email,
+                'password' => $request->password,
+            ], $request->get('remember'))) {
             return redirect()->intended('/home');
         }
         return back()->withInput($request->only('email', 'remember'));

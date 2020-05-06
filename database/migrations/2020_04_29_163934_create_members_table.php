@@ -19,10 +19,10 @@ class CreateMembersTable extends Migration
             $table->string('gender', 255);
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
-            $table->string('phone',255);
-            $table->string('address',255);
-            $table->string('password',255);
-            $table->string('role',255);
+            $table->string('phone', 255);
+            $table->string('address', 255);
+            $table->string('password', 255);
+            $table->string('role', 255);
             $table->integer('project_id')->unsigned();
             $table->rememberToken();
             $table->timestamps();

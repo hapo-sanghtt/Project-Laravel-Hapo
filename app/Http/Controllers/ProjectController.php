@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\Http\Requests\SaveProject;
 use App\Project;
 use Illuminate\Http\Request;
@@ -36,7 +37,10 @@ class ProjectController extends Controller
      */
     public function store(Request $request)
     {
-        Project::create($request->only(['title', 'description', 'status', 'time_estime', 'start_date','end_date', 'member_id', 'customer_id']));
+        Project::create($request
+            ->only([
+                'title', 'description', 'status', 'time_estime', 'start_date','end_date', 'member_id', 'customer_id'
+            ]));
         return redirect()->route('projects.index')->with('success', 'Project save!');
     }
 
