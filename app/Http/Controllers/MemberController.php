@@ -2,7 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Exceptions\Handler;
+use App\Http\Requests\SaveMember;
 use Illuminate\Http\Request;
+use App\Member;
+use Redirect;
+use Response;
 
 class MemberController extends Controller
 {
@@ -13,7 +18,8 @@ class MemberController extends Controller
      */
     public function index()
     {
-        //
+        $member = Member::all();
+        return view('members.index', ['members' => $member]);
     }
 
     /**
@@ -23,7 +29,7 @@ class MemberController extends Controller
      */
     public function create()
     {
-        //
+        return view('members.create');
     }
 
     /**
@@ -34,7 +40,9 @@ class MemberController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        Member::create($request
+            ->only(['name', 'gender', 'email', 'phone', 'address', 'password', 'role', 'project_id']));
+        return redirect()->route('members.index')->with('success', 'Member save!');
     }
 
     /**
@@ -45,7 +53,8 @@ class MemberController extends Controller
      */
     public function show($id)
     {
-        //
+        $member = Member::findOrFail($id);
+        return view('members.show', ['members' => $member]);
     }
 
     /**
@@ -56,7 +65,8 @@ class MemberController extends Controller
      */
     public function edit($id)
     {
-        //
+        $member = Member::findOrFail($id);
+        return view('members.edit', ['members' => $member]);
     }
 
     /**
@@ -68,7 +78,12 @@ class MemberController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $member = Member::findOrFail($id);
+        $member->update($request
+            ->only([
+                'image', 'name', 'password', 'gender', 'email', 'phone', 'address', 'role', 'project_id'
+            ]));
+        return redirect()->route('members.index')->with('success', 'Member update!');
     }
 
     /**
@@ -79,6 +94,8 @@ class MemberController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $member = Member::findOrFail($id);
+        $member->delete();
+        return redirect()->route('members.index')->with('success', 'Member delete!');
     }
 }
