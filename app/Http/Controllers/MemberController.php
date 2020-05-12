@@ -2,7 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Exceptions\Handler;
+use App\Http\Requests\MemberRequest;
+use App\Http\Requests\SaveMember;
 use Illuminate\Http\Request;
+use App\Member;
+use App\Project;
+use Image;
+use Illuminate\Support\Facades\Hash;
+use Redirect;
+use Response;
 
 class MemberController extends Controller
 {
@@ -13,9 +22,9 @@ class MemberController extends Controller
      */
     public function index()
     {
-        //
+        $member = Member::all();
+        return view('members.index', ['members' => $member]);
     }
-
     /**
      * Show the form for creating a new resource.
      *
@@ -23,7 +32,8 @@ class MemberController extends Controller
      */
     public function create()
     {
-        //
+        $projects = Project::all();
+        return view('members.create', ['projects' => $projects]);
     }
 
     /**
@@ -32,9 +42,31 @@ class MemberController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(MemberRequest $request)
     {
-        //
+        $member = Member::create([
+            'image' => $request['image'],
+            'name' => $request['name'],
+            'gender' => $request['gender'],
+            'email' => $request['email'],
+            'phone' => $request['phone'],
+            'address' => $request['address'],
+            'password' => Hash::make($request['password']),
+            'role' => $request['role'],
+            'projects_id' => $request['projects_id'],
+        ]);
+        if ($request->hasFile('image')) {
+            $imageupload = $request->file('image');
+            $imagename = time() . '.' . $imageupload->getClientOriginalExtension();
+            $imagepath = public_path('/image/');
+            $imageupload->move($imagepath, $imagename);
+            $member -> image = '/image/'. $imagename;
+        } else {
+            return $request;
+            $member->image = '/image/';
+        }
+        $member->save();
+        return redirect()->route('members.index')->with('success', 'Member save!');
     }
 
     /**
@@ -45,7 +77,8 @@ class MemberController extends Controller
      */
     public function show($id)
     {
-        //
+        $member = Member::findOrFail($id);
+        return view('members.show', ['members' => $member]);
     }
 
     /**
@@ -56,7 +89,8 @@ class MemberController extends Controller
      */
     public function edit($id)
     {
-        //
+        $member = Member::findOrFail($id);
+        return view('members.edit', ['members' => $member]);
     }
 
     /**
@@ -68,7 +102,29 @@ class MemberController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $member = Member::findOrFail($id);
+        $member->update([
+            'image' => $request['image'],
+            'name' => $request['name'],
+            'gender' => $request['gender'],
+            'email' => $request['email'],
+            'phone' => $request['phone'],
+            'address' => $request['address'],
+            'role' => $request['role'],
+            'projects_id' => $request['projects_id'],
+        ]);
+        if ($request->hasFile('image')) {
+            $imageupload = $request->file('image');
+            $imagename = time() . '.' . $imageupload->getClientOriginalExtension();
+            $imagepath = public_path('/image/');
+            $imageupload->move($imagepath, $imagename);
+            $member -> image = '/image/'. $imagename;
+        } else {
+            return $request;
+            $member->image = '';
+        }
+        $member->save();
+        return redirect()->route('members.index')->with('success', 'Member update!');
     }
 
     /**
@@ -79,6 +135,8 @@ class MemberController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $member = Member::findOrFail($id);
+        $member->delete();
+        return redirect()->route('members.index')->with('success', 'Member delete!');
     }
 }

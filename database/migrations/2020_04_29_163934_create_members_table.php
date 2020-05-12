@@ -14,16 +14,18 @@ class CreateMembersTable extends Migration
     public function up()
     {
         Schema::create('members', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->text('image');
-            $table->string('full_name', 255);
-            $table->string('password', 255);
-            $table->tinyInteger('gender');
-            $table->string('email', 255)->unique();
-            $table->bigInteger('phone');
+            $table->increments('id');
+            $table->string('image', 255)->default('/image/default-image.jpg');
+            $table->string('name', 255);
+            $table->string('gender', 255);
+            $table->string('email')->unique();
+            $table->timestamp('email_verified_at')->nullable();
+            $table->string('phone', 255);
             $table->string('address', 255);
-            $table->tinyInteger('role');
-            $table->bigInteger('project_id')->unsigned();
+            $table->string('password', 255);
+            $table->string('role', 255);
+            $table->integer('projects_id')->unsigned();
+            $table->rememberToken();
             $table->timestamps();
         });
     }

@@ -2,7 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CustomerRequest;
+use App\Http\Requests\SaveCustomer;
+use App\Customer;
 use Illuminate\Http\Request;
+use Redirect;
+use Response;
 
 class CustomerController extends Controller
 {
@@ -13,7 +18,8 @@ class CustomerController extends Controller
      */
     public function index()
     {
-        //
+        $customer = Customer::all();
+        return view('customers.index', ['customers' => $customer]);
     }
 
     /**
@@ -23,7 +29,7 @@ class CustomerController extends Controller
      */
     public function create()
     {
-        //
+        return view('customers.create');
     }
 
     /**
@@ -33,8 +39,27 @@ class CustomerController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {
-        //
+    {dd($request->all());
+        $customer = Customer::create([
+            'image' => $request['image'],
+            'name' => $request['name'],
+            'gender' => $request['gender'],
+            'email' => $request['email'],
+            'phone' => $request['phone'],
+            'address' => $request['address'],
+            'projects_id' => $request['projects_id'],
+        ]);
+        if ($request -> hasFile('image')) {
+            $imageupload = $request->file('image');
+            $imagename = time() . '.' . $imageupload->getClientOriginalExtension();
+            $imagepath = public_path('/image/');
+            $imageupload->move($imagepath, $imagename);
+            $customer->image = '/image/'. $imagename;
+        } else {
+            $customer->image = '';
+        }
+        $customer->save();
+        return redirect()->route('customers.index')->with('success', 'Customer save!');
     }
 
     /**
@@ -45,7 +70,8 @@ class CustomerController extends Controller
      */
     public function show($id)
     {
-        //
+        $customer = Customer::findOrFail($id);
+        return view('customers.show', ['customers' => $customer]);
     }
 
     /**
@@ -56,7 +82,8 @@ class CustomerController extends Controller
      */
     public function edit($id)
     {
-        //
+        $customer = Customer::findOrFail($id);
+        return view('customers.edit', ['customers' => $customer]);
     }
 
     /**
@@ -66,9 +93,15 @@ class CustomerController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(CustomerRequest $request, $id)
     {
-        //
+        $customer = Customer::findOrFail($id);
+        $customer->update($request
+            ->only([
+                'name', 'gender', 'email', 'phone', 'address', 'projects_id',
+            ]));
+
+        return redirect()->route('customers.index')->with('success', 'Customer update!');
     }
 
     /**
@@ -79,6 +112,8 @@ class CustomerController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $customer = Customer::findOrFail($id);
+        $customer->delete();
+        return redirect()->route('customers.index')->with('success', 'Customer delete!');
     }
 }
