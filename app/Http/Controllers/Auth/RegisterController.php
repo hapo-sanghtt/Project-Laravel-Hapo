@@ -9,6 +9,7 @@ use App\Member;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 class RegisterController extends Controller
@@ -57,7 +58,7 @@ class RegisterController extends Controller
             'email' => ['required', 'string', 'email', 'max:255', 'unique:members'],
             'phone' => ['required', 'string', 'max:255'],
             'address' => ['required', 'string', 'max:255'],
-            'image' => ['sometimes', 'image', 'max:5000'],
+            'image' => ['required', 'image', 'max:5000'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);
     }
@@ -72,16 +73,16 @@ class RegisterController extends Controller
     {
         if (request() -> has('image')) {
             $imageupload = request()->file('image');
-            $imagename = time() . '.' . $imageupload->getClientOriginalExtension();
-            $imagepath = public_path('/image/');
-            $imageupload->move($imagepath, $imagename);
+            $imagepath = 'public/upload';
+            $image = Storage::put($imagepath, $imageupload);
+            $image = str_replace('public', 'storage', $image);
             return Member::create([
                 'name' => $data['name'],
                 'gender' => $data['gender'],
                 'email' => $data['email'],
                 'phone' => $data['phone'],
                 'address' => $data['address'],
-                'image' => '/image/' .$imagename,
+                'image' => $image,
                 'password' => Hash::make($data['password']),
             ]);
         }

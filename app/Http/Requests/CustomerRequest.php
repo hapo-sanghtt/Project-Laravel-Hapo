@@ -24,7 +24,7 @@ class CustomerRequest extends FormRequest
     public function rules()
     {
         return [
-            'image' => 'sometimes|image|max:5000',
+            'image' => 'required|image|max:5000',
             'name' => 'required|max:60',
             'gender' => 'required|max:60',
             'email' => 'required|max:60',
