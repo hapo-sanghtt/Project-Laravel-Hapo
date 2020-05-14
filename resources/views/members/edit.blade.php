@@ -15,7 +15,7 @@
                     </div>
                     <br />
                 @endif
-                <form method="post" action="{{ route('members.update',$members->id)}}">
+                <form method="post" action="{{ route('members.update',$members->id)}}" enctype="multipart/form-data">
                     @method('PATCH')
                     @csrf
                     <div class="form-group">

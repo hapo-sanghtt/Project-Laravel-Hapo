@@ -6,6 +6,7 @@ use App\Http\Requests\CustomerRequest;
 use App\Http\Requests\SaveCustomer;
 use App\Customer;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Redirect;
 use Response;
 
@@ -35,37 +36,34 @@ class CustomerController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {dd($request->all());
-        $customer = Customer::create([
-            'image' => $request['image'],
-            'name' => $request['name'],
-            'gender' => $request['gender'],
-            'email' => $request['email'],
-            'phone' => $request['phone'],
-            'address' => $request['address'],
-            'projects_id' => $request['projects_id'],
-        ]);
-        if ($request -> hasFile('image')) {
-            $imageupload = $request->file('image');
-            $imagename = time() . '.' . $imageupload->getClientOriginalExtension();
-            $imagepath = public_path('/image/');
-            $imageupload->move($imagepath, $imagename);
-            $customer->image = '/image/'. $imagename;
-        } else {
-            $customer->image = '';
+    {
+        if ($request->has('image')) {
+            $imageupload = request()->file('image');
+            $imagepath = 'public\image';
+            $image = Storage::put($imagepath, $imageupload);
+            $image = str_replace('public', 'storage', $image);
+            Customer::create([
+                'name' => $request['name'],
+                'gender' => $request['gender'],
+                'email' => $request['email'],
+                'phone' => $request['phone'],
+                'address' => $request['address'],
+                'projects_id' => $request['projects_id'],
+                'image' => $image,
+            ]);
         }
-        $customer->save();
         return redirect()->route('customers.index')->with('success', 'Customer save!');
     }
+
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -77,7 +75,7 @@ class CustomerController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -89,8 +87,8 @@ class CustomerController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function update(CustomerRequest $request, $id)
@@ -107,7 +105,7 @@ class CustomerController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)

@@ -8,6 +8,7 @@ use App\Http\Requests\SaveMember;
 use Illuminate\Http\Request;
 use App\Member;
 use App\Project;
+use Illuminate\Support\Facades\Storage;
 use Image;
 use Illuminate\Support\Facades\Hash;
 use Redirect;
@@ -44,28 +45,23 @@ class MemberController extends Controller
      */
     public function store(MemberRequest $request)
     {
-        $member = Member::create([
-            'image' => $request['image'],
-            'name' => $request['name'],
-            'gender' => $request['gender'],
-            'email' => $request['email'],
-            'phone' => $request['phone'],
-            'address' => $request['address'],
-            'password' => Hash::make($request['password']),
-            'role' => $request['role'],
-            'projects_id' => $request['projects_id'],
-        ]);
-        if ($request->hasFile('image')) {
-            $imageupload = $request->file('image');
-            $imagename = time() . '.' . $imageupload->getClientOriginalExtension();
-            $imagepath = public_path('/image/');
-            $imageupload->move($imagepath, $imagename);
-            $member -> image = '/image/'. $imagename;
-        } else {
-            return $request;
-            $member->image = '/image/';
+        if (request() -> has('image')) {
+            $imageupload = request()->file('image');
+            $imagepath = 'public\upload';
+            $image = Storage::put($imagepath, $imageupload);
+            $image = str_replace('public', 'storage', $image);
+            Member::create([
+                'image' => $image,
+                'name' => $request['name'],
+                'gender' => $request['gender'],
+                'email' => $request['email'],
+                'phone' => $request['phone'],
+                'address' => $request['address'],
+                'password' => Hash::make($request['password']),
+                'role' => $request['role'],
+                'projects_id' => $request['projects_id'],
+            ]);
         }
-        $member->save();
         return redirect()->route('members.index')->with('success', 'Member save!');
     }
 
@@ -115,10 +111,9 @@ class MemberController extends Controller
         ]);
         if ($request->hasFile('image')) {
             $imageupload = $request->file('image');
-            $imagename = time() . '.' . $imageupload->getClientOriginalExtension();
-            $imagepath = public_path('/image/');
-            $imageupload->move($imagepath, $imagename);
-            $member -> image = '/image/'. $imagename;
+            $imagepath = 'public\upload';
+            $image = Storage::put($imagepath, $imageupload);
+            $member -> image = str_replace('public', 'storage', $image);
         } else {
             return $request;
             $member->image = '';
