@@ -111,7 +111,6 @@ class MemberController extends Controller
         ]);
         if ($request->hasFile('image')) {
             $imageupload = $request->file('image');
-            $imagename = time() . '.' . $imageupload->getClientOriginalExtension();
             $imagepath = 'public\upload';
             $image = Storage::put($imagepath, $imageupload);
             $member -> image = str_replace('public', 'storage', $image);
