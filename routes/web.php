@@ -20,3 +20,14 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+Route::resource('members', 'MemberController')->middleware('auth');
+Route::resource('customers', 'CustomerController');
+Route::resource('projects', 'ProjectController');
+Route::resource('tasks', 'TaskController');
+
+Route::get('/auth/login', 'Auth\LoginController@showLoginForm');
+Route::get('/auth/register', 'Auth\RegisterController@showRegisterForm');
+
+Route::post('/auth/login', 'Auth\LoginController@login');
+Route::post('/auth/register', 'Auth\RegisterController@register');

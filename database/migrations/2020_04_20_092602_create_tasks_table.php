@@ -18,8 +18,8 @@ class CreateTasksTable extends Migration
             $table->string('name', 255);
             $table->tinyInteger('status');
             $table->string('description', 255);
-            $table->bigInteger('member_id')->unsigned();
-            $table->bigInteger('project_id')->unsigned();
+            $table->bigInteger('members_id')->unsigned();
+            $table->bigInteger('projects_id')->unsigned();
             $table->timestamps();
         });
     }

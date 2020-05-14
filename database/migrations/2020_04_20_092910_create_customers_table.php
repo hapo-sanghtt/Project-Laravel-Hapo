@@ -15,14 +15,13 @@ class CreateCustomersTable extends Migration
     {
         Schema::create('customers', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->text('image');
-            $table->string('full_name', 255);
-            $table->tinyInteger('gender');
-            $table->bigInteger('phone');
+            $table->string('image', 255)->default('/image/default-image.jpg');
+            $table->string('name', 255);
+            $table->string('gender', 255);
+            $table->integer('phone');
             $table->string('email', 255)->unique();
             $table->string('address', 255);
-            $table->bigInteger('member_id')->unsigned();
-            $table->bigInteger('project_id')->unsigned();
+            $table->integer('projects_id')->unsigned();
             $table->timestamps();
         });
     }
